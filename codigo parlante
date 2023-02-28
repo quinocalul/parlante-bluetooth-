@@ -1,0 +1,93 @@
+#define TRIG A5
+#define ECHO A4
+
+#define PIN_A A0
+#define PIN_B A1
+#define PIN_C A2
+
+#define DISTANCE_1 5  //000
+#define DISTANCE_2 8  //001
+#define DISTANCE_3 12 //010
+#define DISTANCE_4 16 //011  
+#define DISTANCE_5 20 //100
+#define DISTANCE_6 24 //101
+#define DISTANCE_7 28 //110
+#define DISTANCE_8 32 //111 
+#define DEBUG 1
+ int distance(){
+  digitalWrite(TRIG,0);
+  delay(2);
+  digitalWrite(TRIG,1);
+  delay(10);
+  digitalWrite(TRIG,0);
+
+
+  int t = pulseIn(ECHO,HIGH);
+  int d = t/59;
+
+  return d;
+  }
+
+void writeBinari(bool C,bool B,bool A)
+{
+  digitalWrite(PIN_A,A);
+  digitalWrite(PIN_B,B);
+  digitalWrite(PIN_C,C);  
+}
+
+void setup() {
+  // put your setup code here, to run once:
+pinMode(PIN_A, OUTPUT);
+pinMode(PIN_B, OUTPUT);
+pinMode(PIN_C, OUTPUT);
+pinMode(TRIG, OUTPUT);
+pinMode(ECHO, INPUT);
+if(DEBUG)Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+int dis = distance();
+
+if(DEBUG)Serial.print("dis:");
+if(DEBUG)Serial.println(dis);
+
+if(dis < DISTANCE_1){
+  writeBinari(0,0,0);
+  if(DEBUG)Serial.println("vOLUMEN Max");
+  }
+else if(dis < DISTANCE_2){
+  writeBinari(0,0,1);
+  if(DEBUG)Serial.println("vOLUMEN Medio alto");
+  }
+else if(dis < DISTANCE_3){
+  writeBinari(0,1,0);
+  if(DEBUG)Serial.println("vOLUMEN Medio alto");
+  }
+
+else if(dis < DISTANCE_4){
+  writeBinari(0,1,1);
+  if(DEBUG)Serial.println("vOLUMEN Medio");
+  }
+
+else if(dis < DISTANCE_5){
+  writeBinari(1,0,0);
+  if(DEBUG)Serial.println("vOLUMEN Medio");
+  }
+ 
+else if(dis < DISTANCE_6){
+  writeBinari(1,0,1);
+  if(DEBUG)Serial.println("vOLUMEN Medio bajo");
+  }
+
+else if(dis < DISTANCE_7){
+  writeBinari(1,1,0);
+  if(DEBUG)Serial.println("vOLUMEN Medio bajo");
+  }
+ 
+else if(dis < DISTANCE_8){
+  writeBinari(1,1,1);
+  if(DEBUG)Serial.println("vOLUMEN Min");
+  }
+
+}
